@@ -1,0 +1,103 @@
+* {
+    margin: 0;  
+    padding: 0;
+    box-sizing:border-box;
+}
+
+:root {
+    /* colors */    
+    --clr-light: #adb9a7; 
+    --clr-dark: #30343f;  
+    --clr-primary: #03256C;
+    --clr-paragraph: #edeaf7;/*#434345;*/
+    --clr-accent: #cb793a; /* #8c86aa; */    
+    /*--clr-banner: #a7b4a1;*/
+    
+    --clr-header: #adb9a7; /*#34542b;*/
+    --clr-headings: var(--clr-primary);
+    --foreground: var(--clr-light);
+    --background: var(--clr-dark);
+    /*--foreground: var(--clr-dark);
+    --background: var(--clr-light);*/
+    --clr-anchor:  #d4e4bc;
+    
+    /* fonts */
+    --heading1-font: 'Lobster', sans-serif;
+    --heading2-font: "IM Fell Double Pica SC", serif;
+    --heading-font: "IM Fell DW Pica", serif;
+    --paragraph-font: 'Poppins', sans-serif;    
+}
+
+body {
+    font-family: var(--paragraph-font);
+    margin: 0 auto;    
+    font-size: 0.8rem;
+    width: 100%;
+    Display: block;
+    padding: 0.5rem;    
+    background-color: var(--background);
+}
+
+header {
+    background-color: var(--clr-header);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.header-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+nav {    
+    display: flex;
+}
+
+.nav-links {
+    color: var(--clr-dark);
+    padding: 1.5rem;
+    font-size: 1.1rem;
+}
+
+h1 {
+    font-family: var(--heading1-font);
+    color: var(--clr-light);
+    text-align: center;
+    font-size: 3rem;
+}
+
+h2 {
+    color: var(--clr-headings);
+    font-family: var(--heading2-font);
+}
+
+h3, h4, h5, h6 {
+    color:var(--clr-headings);
+    font-family: var(--heading-font);    
+}
+
+p {
+    color: var(--clr-paragraph);
+    padding: 1.1rem; 
+    /* change in large view? */
+}
+
+a {
+    text-decoration: none;
+    color: var(--clr-anchor);
+}
+
+/* ------------------footer---------------------- */
+
+footer {
+    display: block;
+    background-color: var(--clr-header);
+    /* width: 100%; */
+}
+
+footer p {
+    color: var(--clr-light)
+}
+
