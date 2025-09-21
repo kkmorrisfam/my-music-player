@@ -7,9 +7,9 @@ from django.conf import settings
 class Track(models.Model):
     title = models.CharField(max_length=200)
     audio = models.FileField(upload_to='tracks/', max_length=100)   
-    artists = models.ManyToManyField(Artist, through="TrackArtist" ,related_name="tracks", blank=True)
-    albums = models.ManyToManyField(Album, through="AlbumTrack", related_name="tracks", blank=True)
-    categories = models.ManyToManyField(Category, related_name="tracks", blank=True) # django creates simple join table without defining class for "through"
+    artists = models.ManyToManyField("Artist", through="TrackArtist", related_name="tracks", blank=True)
+    albums = models.ManyToManyField("Album", through="AlbumTrack", related_name="tracks", blank=True)
+    categories = models.ManyToManyField("Category", related_name="tracks", blank=True) # django creates simple join table without defining class for "through"
 
     def __str__(self):
         return self.title
@@ -20,7 +20,7 @@ class Album(models.Model):
         upload_to='album_img/', 
         default="album_img/fallback.webp",
         max_length=100)
-    artists = models.ManyToManyField(Artist, through="AlbumArtist", related_name="albums", blank=True)
+    artists = models.ManyToManyField("Artist", through="AlbumArtist", related_name="albums", blank=True)
 
     def __str__(self):
         return self.name
@@ -82,8 +82,8 @@ class AlbumTrack(models.Model):
 User = settings.AUTH_USER_MODEL
 
 class Favorite(models.Model):
-    user = models.ForeignKey(User, related_name="favorites",on_delete=models.CASCADE)
-    track = models.ForeignKey(Track, related_name="favorite_by" on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="favorites", on_delete=models.CASCADE)
+    track = models.ForeignKey(Track, related_name="favorite_by", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
