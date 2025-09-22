@@ -21,6 +21,7 @@ class Album(models.Model):
         default="album_img/fallback.webp",
         max_length=100)
     artists = models.ManyToManyField("Artist", through="AlbumArtist", related_name="albums", blank=True)
+    released = models.DateField(null=True, blank=True, db_index=True)
 
     def __str__(self):
         return self.name
