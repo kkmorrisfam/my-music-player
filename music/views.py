@@ -6,7 +6,9 @@ from .models import Album, Track, Artist
 def homepage(request):
     # albums = Album.objects.all()    
     # data = {'albums': albums}
-    tracks = Track.objects.all()
+    # using prefetch_related instead of all, takes it down from 47 queries to just 2 with only "albums", adds one for each table fetching from
+    # tracks = Track.objects.prefetch_related('albums', 'artists')
+    tracks = Track.objects.filter(title__istartswith="t").prefetch_related('albums', 'artists')
     data = {'tracks': tracks}
     return render(request, 'index.html', data)
 
