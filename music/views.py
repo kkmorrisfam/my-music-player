@@ -1,9 +1,14 @@
 from django.shortcuts import render
+from .models import Album, Track, Artist
 
 # this is referred to in urls.py
 # path('', views.homepage),
 def homepage(request):
-    return render(request, 'index.html')
+    # albums = Album.objects.all()    
+    # data = {'albums': albums}
+    tracks = Track.objects.all()
+    data = {'tracks': tracks}
+    return render(request, 'index.html', data)
 
 def playlist(request):
     return render(request, 'playlist.html')
