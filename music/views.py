@@ -20,6 +20,7 @@ def homepage(request):
     return render(request, 'index.html', data)
 
 def playlist(request):
+    
     return render(request, 'playlist.html')
 
 def about(request):
