@@ -27,10 +27,14 @@
                 {% for album in track.albums.all %}
                     <img src="{{album.cover.url}}" alt="{{ album.name }} cover">
                     {% comment %} <li> {{ album.name }} </li> {% endcomment %}
-
+                    <audio controls>
+                        <source src={{track.audio.url}} type="audio/mpeg" >
+                        Your browser does not support the audio element
+                    </audio>
                 {% endfor %}
             </ul> 
             <h3> {{ track.title }} </h3>
+
             <ul>
                 {% for artist in track.artists.all %}
                     <li> {{ artist.name}} </li>
