@@ -6,7 +6,18 @@
 
 {% block content %}
 
-    <h1>Playlists</h1>
+    <h1>My Playlists</h1>
     <p>Check out my <a href="/">Music Library</a> page</p>
+
+        <div class="carousel">
+    {% for playlist in playlists %}    
+        <div class="card">            
+            <ul>
+                <li class="playlist-name"> {{ playlist.name }} </li> 
+            </ul> 
+        </div>
+    {% endfor %} 
+    </div>
+
 
 {% endblock content %}

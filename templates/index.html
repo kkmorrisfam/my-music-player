@@ -20,24 +20,30 @@
     {% endfor %}}  {% endcomment %}
 
     {% comment %} this prints each track, with album name underneath {% endcomment %}
-    {% for track in tracks %}
-        <p> {{ track.title }} </p>
-        <ul>
-            {% for album in track.albums.all %}
-                <img src="{{album.cover.url}}" alt="{{ album.name }} cover">
-                <li> {{ album.name }} </li>
+    <div class="carousel">
+    {% for track in tracks %}    
+        <div class="card">            
+            <ul>
+                {% for album in track.albums.all %}
+                    <img src="{{album.cover.url}}" alt="{{ album.name }} cover">
+                    {% comment %} <li> {{ album.name }} </li> {% endcomment %}
 
-            {% endfor %}
-        </ul>
-        
-        <ul>
-            {% for artist in track.artists.all %}
-                <li> {{ artist.name}} </li>
+                {% endfor %}
+            </ul> 
+            <h3> {{ track.title }} </h3>
+            <ul>
+                {% for artist in track.artists.all %}
+                    <li> {{ artist.name}} </li>
 
-            {% endfor %}
-        </ul>
-
+                {% endfor %}
+            </ul>
+        </div>
     {% endfor %} 
+    </div>
+    
+    
+
+
 
 {% comment %} <h2>{{ album.name }}</h2>
 <img src="{{ album.cover.url }}" alt="{{ album.name }}">

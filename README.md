@@ -38,10 +38,11 @@ After I started the venv environment, then I installed Django and my packages. I
 >>py -m pip install Django
 
 Packages installed are found in the requirements.txt project file and include:
--Pillow
--Django debug toolbar
--Django stubs
--Psycopg2
+
+* Pillow
+* Django debug toolbar
+* Django stubs
+* Psycopg2
 
 ## Useful Websites
 
