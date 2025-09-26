@@ -51,7 +51,7 @@ header {
     object-fit: contain;
 }
 
-nav {    
+.navigation {    
     display: flex;
 }
 
@@ -88,13 +88,16 @@ a {
     text-decoration: none;
     color: var(--clr-anchor);
 }
+/* -----------Navigation------------*/
 
-.attribute img {
-    width: 15%;
-    height: 15%;
-    object-fit: contain;
-}
 
+.active {    
+    background-color: var(--background);
+	color: var(--foreground);
+  }
+
+
+/*---------Carousel---------------*/
 .carousel {
     display: flex;
     align-items: flex-start;
@@ -140,10 +143,23 @@ a {
     color: var(--clr-primary)
 }
 
+
+/* ---------Playlist Page----------------*/
 .playlist-name {
     color: var(--clr-primary);
     font: var(--heading2-font);
 }
+
+
+
+/* -------About Page----------------*/
+.attribute img {
+    width: 15%;
+    height: 15%;
+    object-fit: contain;
+}
+
+
 
 /* ------------------footer---------------------- */
 
@@ -157,8 +173,72 @@ footer p {
     color: var(--clr-light)
 }
 
+
+/*________________Mobile view*/
 @media(max-width: 500px) {
     .card {
         flex: 0 0 100%;
     }
+
+    /* small view navigation */
+    .navigation {
+    border-bottom: .5rem solid var(--clr-medium1); 
+    }
+
+    .navigation ul {
+        list-style: none;
+        display: flex;
+        padding: .5rem;
+        padding-top: 2.5rem;
+        flex-direction: column;
+    }
+
+    .navigation ul li {
+        flex: 1 1 100%;
+    }
+
+    .navigation a {
+        display: none;
+        padding: .5rem;
+        font-weight: 400;
+        font-size: .9rem;
+       
+        text-align: center;    
+    }
+
+    .navigation a:hover {
+        background-color: var(--clr-light);
+        
+        font-weight: 700;
+    }       
+        
+    
+    #menu {
+        font-size: 1.5rem;
+        border: 1px solid rgba(0,0,0,.3);
+        padding: 3px 7px 6px;
+        background-color: var(--background);
+        color: var(--foreground);
+        position: absolute;
+        top: 0.5rem;
+        right: 0;
+        z-index: 1;
+    }
+
+    #menu::before {
+        content: "☰";
+    }
+
+    #menu.open::before {
+        content: "✖";
+    }
+
+
+
+    /* when the button is clicked - the open class is toggled (added/removed) */
+    .open a {
+        display: block;
+    }
+
+
 }

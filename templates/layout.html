@@ -11,33 +11,34 @@
     </title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="{% static 'js/main.js' %}" defer></script>
+    <script src="{% static 'js/navigation.js' %}" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IM+Fell+DW+Pica:ital@0;1&family=IM+Fell+Double+Pica+SC&family=Lobster&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
 </head>
 <body>
-    <header>
-        
-            <div class="header-icon">
-                <img src="{% static 'img/hazel-z-W_lXhs-q-sI-unsplash.webp' %}" 
-                    alt="green headphones" width="400" height="260">
-            </div>
-        <nav>    
-
-                <a href="/" class="nav-links">
+    <header>          
+        <div class="header-icon">
+            <img src="{% static 'img/hazel-z-W_lXhs-q-sI-unsplash.webp' %}" 
+                alt="green headphones" width="400" height="260">
+        </div>
+        <button id="menu" aria-label="navigation menu"></button>    
+        <nav class="navigation">    
+            <ul>
+                <li><a href="/" class="nav-links {% if request.path == '/' %}active{% endif %}">
                     <span aria-label="Library">Library</span>
-                </a> | 
-                <a href="/playlist" class="nav-links">
+                </a></li>
+                <li><a href="/playlist" class="nav-links {% if request.path == '/playlist/' %}active{% endif %}">
                     <span aria-label="Playlists">Playlists</span>
-                </a> | 
-                <a href="/about" class="nav-links">
+                </a></li>
+                <li><a href="/about" class="nav-links {% if request.path == '/about/' %}active{% endif %}">
                     <span aria-label="About">About</span>
-                </a> | 
-                <a href="/auth" class="nav-links">
+                </a></li>
+                {% comment %} <a href="/auth" class="nav-links">
                     <span aria-label="Login">Login</span>
-                </a>
-            
+                </a> {% endcomment %}
+            <ul>
         </nav>
     </header>
     <main>
