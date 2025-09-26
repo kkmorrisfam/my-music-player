@@ -2,13 +2,11 @@
 
 ## Overview
 
-This is a project for my portfolio.  I've created a music app in Django and connected it to a PostgreSQL database.  The database uses a normalized design which uses many-to-many relationships for data retrieval. I've added my own css file for styling and created my own html templates.
+I've created a music app in Django and connected it to a PostgreSQL database.  The database uses a normalized design which uses many-to-many relationships for data retrieval. I've added my own css file for styling and added html templates.  
 
 The models are set up so that an album can have multiple tracks, one artist or multiple artists.  However if you display an album with the artist and there are many artists, it will just display “various” for the artist field.  A track can be listed on multiple albums and an artist can be on both an album and a track.  A track can also have multiple artists. At this point I have not utilized everything I can with this design, but would like it to be flexible as I add to it in the future.
 
 The purpose of this app was to become familiar with audio files and data retrieval so that I could work on creating a podcast app in the future.
-
-{Provide a link to your YouTube demonstration.  It should be a 4-5 minute demo of the software running (starting the server and navigating through the web pages) and a walkthrough of the code.}
 
 [Software Demo Video](http://youtube.link.goes.here)
 
@@ -23,19 +21,32 @@ This is a music player app designed to display the library of music found in the
 ## Development Environment
 
 I used VSCode on a Windows machine to develop this software.  I utilized a virtual environment “venv”. These are the commands I used.
-create venv environment in terminal
->> py -m venv .venv
+
+Create venv environment
+
+```powershell
+py -m venv .venv
+```
 
 You have to activate the virtual environment whenever you open a new terminal window.
 
-start venv environment
->> .\.venv\Scripts\Activate.ps1
+Start venv environment (on windows)
 
-stop venv environment
->>deactivate
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Stop venv environment
+
+```powershell
+deactivate
+```
 
 After I started the venv environment, then I installed Django and my packages. I installed Django
->>py -m pip install Django
+
+```powershell
+py -m pip install Django
+```
 
 Packages installed are found in the requirements.txt project file and include:
 

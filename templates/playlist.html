@@ -9,14 +9,31 @@
     <h1>My Playlists</h1>
     <p>Check out my <a href="/">Music Library</a> page</p>
 
-        <div class="carousel">
-    {% for playlist in playlists %}    
-        <div class="card">            
-            <ul>
-                <li class="playlist-name"> {{ playlist.name }} </li> 
-            </ul> 
-        </div>
-    {% endfor %} 
+    <div class="carousel">
+        {% for playlist in playlists %}    
+            <div class="card">                       
+                {# display album cover from first track in query #} 
+                {% with first=playlist.pt_items.0  %} {# creates alias for reference#}
+                    {% if first %} {# checks in case there's an empty playlist, make sure there is a track#}
+                        {# one more check because of M2M album-track, track can have 0 albums #}
+                        {% with album=first.track.albums.all.0 %} {# get the first track album cover #}
+                            {% if album %}                    
+                                <img src="{{ album.cover.url }}" alt="{{album.cover.name}}">
+                            {% endif %} 
+                        {% endwith %}
+                    
+                
+                        <h3> {{ playlist.name }} </h3> 
+                        {# display first few artists on the track #}
+                        <p class="artists">
+                            {% for artist in first.track.artists.all|slice:":2" %}
+                                {{ artist.name }} {% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        {% endfor %} 
     </div>
 
 
