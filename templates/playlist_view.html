@@ -8,7 +8,29 @@
 
 {% block content %}
 
+    <h1>{{ playlist.name }} </h1>
 
-    
+    {% with first=playlist.items.0 %}
+        {% if first %}
+            {% with album=first.track.albums.all.0  %}
+                {% if album %}
+                    <img src="{{ album.cover.url }}" alt="{{ album.name }} cover" > 
+                {% endif %}
+            {% endwith %}
+        {% endif  %}
+    {% endwith %}
+
+    <ul>
+        {% for item in playlist.items %}
+            <li>
+                {{ item.position }}. {{ item.track.title }}
+                - {% for a in item.track.artists.all %}
+                    {{a.name}}
+                    {% if not forloop.last%},{% endif %} 
+                {% endfor %}           
+            </li>
+        {%  endfor %}
+
+    </ul>
 
 {% endblock content %}

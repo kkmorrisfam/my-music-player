@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Album, Track, Artist, Playlist, PlaylistTrack
 from django.db.models.functions import Random
 from django.db.models import Prefetch
@@ -38,20 +38,26 @@ def playlist(request):
     
     return render(request, 'playlist.html', {"playlists": playlists})
 
-# def playlist(request):
-#     prefetch = Prefetch('playlisttrack_set', queryset=PlaylistTrack.objects
-#                         .select_related('track')
-#                         .ordered_by('position', 'id'),
-#                         to_attr='items'
-#                         )
-#     if request.user.is_authenticated:
-#         playlists = (Playlist.objects
-#                      .filter(owner=request.user)
-#                      .prefetch_related(prefetch)
-#                      .order_by('name'))
-        
+def playlist_view(request, pk):
+    prefetch = Prefetch(
+                        'playlisttrack_set', 
+                        queryset=(
+                            PlaylistTrack.objects
+                            .select_related('track')
+                            .prefetch_related('track__albums', 'track__artists')
+                            .order_by('position', 'id')                            
+                            ), to_attr='items'
+                        )
     
-#     return render(request, 'playlist.html', {"playlists": playlists})
+    if request.user.is_authenticated:
+        playlist = get_object_or_404(
+                        Playlist.objects                     
+                        .prefetch_related(prefetch),
+                        pk=pk,
+                        owner=request.user
+                    )
+    
+    return render(request, 'playlist_view.html', {"playlist": playlist})
 
 
 

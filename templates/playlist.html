@@ -23,7 +23,10 @@
                         {% endwith %}
                     
                 
-                        <h3> {{ playlist.name }} </h3> 
+                        <h3> 
+                            <a href="{% url 'music:playlist_view' pk=playlist.pk %}">
+                            {{ playlist.name }}     
+                        </h3> 
                         {# display first few artists on the track #}
                         <p class="artists">
                             {% for artist in first.track.artists.all|slice:":2" %}

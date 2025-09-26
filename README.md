@@ -14,7 +14,7 @@ The purpose of this app was to become familiar with audio files and data retriev
 
 {Describe each of the web pages you created and how the web app transitions between each of them.  Also describe what is dynamically created on each page.}
 
-This is a music player app designed to display the library of music found in the database.  The home page displays the library of music tracks in a random order.  The playlist page should show a list of the anonymous user's playlists.
+This is a music player app designed to display the library of music found in the database.  The home page displays the library of music tracks in a random order.  The playlist page currently lists the playlists for admin when admin is logged in.
 
 -You can click on a track and play the track.
 
@@ -63,6 +63,7 @@ Packages installed are found in the requirements.txt project file and include:
 
 ## Future Work
 
-* Add user authentication
+* Add user registration and login functionality
 * If user is logged in, a user can add a track to their playlist
 * Setup app in the cloud for production, with a cloud database
+* Add form to upload user albums or songs
