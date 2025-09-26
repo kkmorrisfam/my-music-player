@@ -171,13 +171,18 @@ a {
 
 /*---------Playlist View Page------------*/
 
+.playlist-container {
+    display: flex;
+    flex-direction: column;
+}
+
 .playlist-album {
     background-color: var(--clr-anchor);
     padding: 1em;
     border-radius: 0.6em;
-    /* text-align: center; */
-    /* align-content: center;     */
-    display: flex;
+    text-align: center;
+    align-content: center;    
+    /* display: flex; */
     /* flex-direction: column; */
 }
 
@@ -199,6 +204,9 @@ a {
     font-size: large;
     font-weight: 700;
     margin: 10px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 /* .track-list-audio {
