@@ -169,9 +169,42 @@ a {
     font: var(--heading2-font);
 }
 
+/*---------Playlist View Page------------*/
 
+.playlist-album {
+    background-color: var(--clr-anchor);
+    padding: 1em;
+    border-radius: 0.6em;
+    /* text-align: center; */
+    /* align-content: center;     */
+    display: flex;
+    /* flex-direction: column; */
+}
 
-/* -------About Page----------------*/
+.track-card {
+    /* opacity: 0.5; */
+    /* background-color: var(--clr-light); */
+    padding: 3rem;
+       
+}
+.track-card ul {
+    list-style: none;
+}
+
+.track-card li {
+    color: var(--clr-dark);
+    /* opacity: 0.75; */
+    background-color: var(--clr-accent);
+    padding: 3rem;
+    font-size: large;
+    font-weight: 700;
+    margin: 10px; 
+}
+
+/* .track-list-audio {
+   
+} */
+/* ------------About Page----------------*/
 .attribute img {
     width: 15%;
     height: 15%;

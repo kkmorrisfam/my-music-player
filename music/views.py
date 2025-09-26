@@ -69,9 +69,10 @@ def about(request):
 
 """  
     Explanation of query in query for all playlists
-    Query 1: filter by owner
 
-    Playlist.objects.filter(owner=request.user)
+Query 1: filter by owner
+
+    (queryset)playlists = Playlist.objects.filter(owner=request.user)
     
     SELECT "music_playlist"."id",
         "music_playlist"."owner_id",
@@ -80,9 +81,11 @@ def about(request):
     FROM "music_playlist"
     WHERE "music_playlist"."owner_id" = 1
 
-    Query 2: get playlist items + joined tracks
-    Prefetch('playlisttrack_set', ...) part with
-    .select_related('track') and .order_by('position').
+Query 2: get all playlist objects + joined tracks
+    queryset=(PlaylistTrack.objects
+                        .select_related('track')                        
+                        .order_by('position')
+                        )
 
     SELECT *
     FROM "music_playlisttrack"
@@ -91,7 +94,21 @@ def about(request):
     WHERE "music_playlisttrack"."playlist_id" IN (1, 2, 3, 4)
     ORDER BY "music_playlisttrack"."position" ASC
 
-    Query 3: (inside Query 2 Prefetch) get artists for those tracks
+Query 3: (inside Query 2 Prefetch) get albums for those tracks
+    queryset = ....prefetch_related('track__albums', ...)
+
+    SELECT ("music_albumtrack"."track_id") AS "_prefetch_related_val_track_id",
+       "music_album"."id",
+       "music_album"."name",
+       "music_album"."cover",
+       "music_album"."released"
+    FROM "music_album"
+    INNER JOIN "music_albumtrack"
+        ON ("music_album"."id" = "music_albumtrack"."album_id")
+    WHERE "music_albumtrack"."track_id" IN (6, 25, 39, 40, 11, 45, 29, 20, 38, 24, 42, 32, 47, 18, 2, 37)
+
+Query 4: (inside Query 2 Prefetch) get artists for those tracks
+    queryset = ......prefetch_related(..., 'track__artists')
 
     SELECT ("music_trackartist"."track_id") AS "_prefetch_related_val_track_id",
        "music_artist"."id",
@@ -100,8 +117,6 @@ def about(request):
     INNER JOIN "music_trackartist"
         ON ("music_artist"."id" = "music_trackartist"."artist_id")
     WHERE "music_trackartist"."track_id" IN (6, 25, 39, 40, 11, 45, 29, 20, 38, 24, 42, 32, 47, 18, 2, 37)
-
-    -from Debug tool
-
-
+ 
+       -SQL statements from Debug tool
  """

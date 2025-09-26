@@ -7,30 +7,45 @@
 {% endblock %}
 
 {% block content %}
+    <div>
+        <h1>{{ playlist.name }} </h1>
+        <p>View all <a href="/playlist">playlists</a></p>
+    </div>
+    <div class="playlist-album">
+        {% with first=playlist.items.0 %}
+            {% if first %}
+                {% with album=first.track.albums.all.0  %}
+                    {% if album %}
+                        <img src="{{ album.cover.url }}" alt="{{ album.name }} cover" > 
+                    {% endif %}
+                {% endwith %}
+            {% endif  %}
+        {% endwith %}
+    </div>
+    <div class="track-card">
+        <ul>
+            
+            {% for item in playlist.items %}
+                <li class="track-list">
+                    <div class="track-list-name">
+                        {{ item.position }}. {{ item.track.title }}
+                        - {% for a in item.track.artists.all %}
 
-    <h1>{{ playlist.name }} </h1>
+                            {{a.name}}
+                            
+                            {% if not forloop.last%},{% endif %} 
+                        {% endfor %}
+                    </div>           
+                    <div class="track-list-audio">
+                            <audio controls>
+                            <source src={{item.track.audio.url}} type="audio/mpeg" >
+                            Your browser does not support the audio element
+                            </audio>
+                    </div>
+                </li>
+            {%  endfor %}
 
-    {% with first=playlist.items.0 %}
-        {% if first %}
-            {% with album=first.track.albums.all.0  %}
-                {% if album %}
-                    <img src="{{ album.cover.url }}" alt="{{ album.name }} cover" > 
-                {% endif %}
-            {% endwith %}
-        {% endif  %}
-    {% endwith %}
-
-    <ul>
-        {% for item in playlist.items %}
-            <li>
-                {{ item.position }}. {{ item.track.title }}
-                - {% for a in item.track.artists.all %}
-                    {{a.name}}
-                    {% if not forloop.last%},{% endif %} 
-                {% endfor %}           
-            </li>
-        {%  endfor %}
-
-    </ul>
+        </ul>
+    </div>
 
 {% endblock content %}
