@@ -8,15 +8,13 @@ The models are set up so that an album can have multiple tracks, one artist or m
 
 The purpose of this app was to become familiar with audio files and data retrieval so that I could work on creating a podcast app in the future.
 
-[Software Demo Video](http://youtube.link.goes.here)
-
 ## Web Pages
 
 Library (Home):
 When users land on the Home page, they see the title “Music Library” a “Check out my playlists” link. The navbar is consistent across the site (Logo, Library, Playlists, About).  In the main section of the page are cards with all of the music tracks in the library.  The cards display the Album cover, the track name and the artist or artists.  The card also includes an audio link so that a user can play the audio for that track.
 
 Playlists:
-The Playlist page displays playlists unique to the user. This page displays cards similar to the library page, but it displays the album image from the first track in the playlist, the playlist title and the first two artists from the tracks in the playlist.  When a user clicks anywhere on the playlist card, it takes the user to the playlist detail page.  It passes the primary key of the playlist to the playlist view page to display one playlist.
+This page displays playlists unique to the user. It displays cards similar to the library page, but it displays the album image from the first track in the playlist, the playlist title and the first two artists from the tracks in the playlist.  When a user clicks anywhere on the playlist card, it takes the user to the playlist detail page.  It passes the primary key of the playlist to the playlist view page to display one playlist.
 
 Playlist Detail:
 This page displays the details for the playlist chosen on the playlists page.  The album cover for the first track is displayed prominently, then beneath, a list of song titles with their artists, and a link to the audio file. A user can then choose and play a music track.
