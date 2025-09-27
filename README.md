@@ -12,11 +12,17 @@ The purpose of this app was to become familiar with audio files and data retriev
 
 ## Web Pages
 
-{Describe each of the web pages you created and how the web app transitions between each of them.  Also describe what is dynamically created on each page.}
+Library (Home):
+When users land on the Home page, they see the title “Music Library” a “Check out my playlists” link. The navbar is consistent across the site (Logo, Library, Playlists, About).  In the main section of the page are cards with all of the music tracks in the library.  The cards display the Album cover, the track name and the artist or artists.  The card also includes an audio link so that a user can play the audio for that track.
 
-This is a music player app designed to display the library of music found in the database.  The home page displays the library of music tracks in a random order.  The playlist page currently lists the playlists for admin when admin is logged in.
+Playlists:
+The Playlist page displays playlists unique to the user. This page displays cards similar to the library page, but it displays the album image from the first track in the playlist, the playlist title and the first two artists from the tracks in the playlist.  When a user clicks anywhere on the playlist card, it takes the user to the playlist detail page.  It passes the primary key of the playlist to the playlist view page to display one playlist.
 
--You can click on a track and play the track.
+Playlist Detail:
+This page displays the details for the playlist chosen on the playlists page.  The album cover for the first track is displayed prominently, then beneath, a list of song titles with their artists, and a link to the audio file. A user can then choose and play a music track.
+
+About Page:
+This page displays details for images and audio copyright information for assets used in this project.
 
 ## Development Environment
 
