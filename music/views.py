@@ -38,6 +38,8 @@ def playlist(request):
     
     return render(request, 'playlist.html', {"playlists": playlists})
 
+#This view checks if a user is logged in, takes the primary key from the url passed in and returns
+# an playlsit object with all of it's tracks, the album covers and the artists associated with those tracks
 def playlist_view(request, pk):
     prefetch = Prefetch(
                         'playlisttrack_set', 
@@ -60,7 +62,7 @@ def playlist_view(request, pk):
     return render(request, 'playlist_view.html', {"playlist": playlist})
 
 
-
+# Returns a static page with no queries
 def about(request):
     return render(request, 'about.html')
     # knows where it's found because of entry in the settings.py with 'DIRS'

@@ -14,19 +14,20 @@
     </div>
     <div class="playlist-container">
         <div class="playlist-album">
-            {% with first=playlist.items.0 %}
-                {% if first %}
-                    {% with album=first.track.albums.all.0  %}
-                        {% if album %}
-                            <img src="{{ album.cover.url }}" alt="{{ album.name }} cover" > 
-                        {% endif %}
-                    {% endwith %}
-                {% endif  %}
-            {% endwith %}
+            <div class="playlist-album-frame">
+                {% with first=playlist.items.0 %}
+                    {% if first %}
+                        {% with album=first.track.albums.all.0  %}
+                            {% if album %}
+                                <img src="{{ album.cover.url }}" alt="{{ album.name }} cover" > 
+                            {% endif %}
+                        {% endwith %}
+                    {% endif  %}
+                {% endwith %}
+            </div>
         </div>
         <div class="track-card">
-            <ul>
-                
+            <ul>                
                 {% for item in playlist.items %}
                     <li class="track-list">
                         <div class="track-list-name">
@@ -46,7 +47,6 @@
                         </div>
                     </li>
                 {%  endfor %}
-
             </ul>
         </div>
     </div>

@@ -24,7 +24,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),    
     path('', include("music.urls")),
-    path("__debug__", include("debug_toolbar.urls")),
+    path("__debug__", include("debug_toolbar.urls")),  # added to see query information
 ]
 
 # move to debug for development only

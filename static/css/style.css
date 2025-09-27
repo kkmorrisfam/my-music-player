@@ -182,8 +182,19 @@ a {
     border-radius: 0.6em;
     text-align: center;
     align-content: center;    
-    /* display: flex; */
+    display: grid;
+    place-items: center;
     /* flex-direction: column; */
+}
+
+.playlist-album-frame {
+    padding: 0.5rem;
+    border-radius: 15px;
+}
+
+.playlist-album-frame img {
+    overflow-x: hidden;
+    max-width: 100%;
 }
 
 .track-card {
@@ -213,13 +224,21 @@ a {
    
 } */
 /* ------------About Page----------------*/
+/* .attribute-container {
+    display: flex;
+    
+} */
+
 .attribute img {
     width: 15%;
     height: 15%;
     object-fit: contain;
 }
 
-
+.attribute h2,
+.attribute a {
+    color: var(--clr-light);
+}
 
 /* ------------------footer---------------------- */
 
@@ -292,6 +311,16 @@ footer p {
         content: "✖";
     }
 
+    .track-list {
+        flex-direction: column;
+        align-items: stretch;
+        gap: .75rem;
+    }
+
+    .track-list-audio audio {
+        /* width: 50%; */
+        max-width: 100%;
+    }
 
 
     /* when the button is clicked - the open class is toggled (added/removed) */
