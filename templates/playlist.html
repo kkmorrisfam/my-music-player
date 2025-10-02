@@ -13,17 +13,19 @@
         {% for playlist in playlists %}    
             <div class="card">   
                 <a href="{% url 'music:playlist_view' pk=playlist.pk %} ">
-                <span aria-label="{{ playlist.name }}"></span>                    
-                {# display album cover from first track in query #} 
-                {% with first=playlist.pt_items.0  %} {# creates alias for reference#}
-                    {% if first %} {# checks in case there's an empty playlist, make sure there is a track#}
-                        {# one more check because of M2M album-track, track can have 0 albums #}
-                        {% with album=first.track.albums.all.0 %} {# get the first track album cover #}
-                            {% if album %}                    
-                                <img src="{{ album.cover.url }}" alt="{{album.cover.name}}">                                
-                            {% endif %} 
-                        {% endwith %}
-                
+                <span aria-label="{{ playlist.name }}"></span>
+                <div>                    
+                    {# display album cover from first track in query #} 
+                    {% with first=playlist.pt_items.0  %} {# creates alias for reference#}
+                        {% if first %} {# checks in case there's an empty playlist, make sure there is a track#}
+                            {# one more check because of M2M album-track, track can have 0 albums #}
+                            {% with album=first.track.albums.all.0 %} {# get the first track album cover #}
+                                {% if album %}                    
+                                    <img src="{{ album.cover.url }}" alt="{{album.cover.name}}">                                
+                                {% endif %} 
+                            {% endwith %}
+                </div>
+                <div>
                         <h3> 
                             {{ playlist.name }}                            
                         </h3> 
@@ -33,8 +35,9 @@
                                 {{ artist.name }} {% if not forloop.last %}, {% endif %}
                             {% endfor %}
                         </p>
-                    {% endif %}
-                {% endwith %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
             </div>
         {% endfor %} 
     </div>

@@ -119,15 +119,85 @@ a {
 /*---------Carousel---------------*/
 .carousel {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     /* width: 100%;  */
     overflow-x: auto;
-    margin: 2em auto;
+    margin: 2rem 4rem;
     display: flex;
     gap: .9em;
     padding-inline: 1rem;
     scroll-behavior: smooth;
+    
+    anchor-name: --carousel; /*Name has to start with two dashes*/  
+    /*Need anchor-name to use position:fixed on buttons*/
+    scroll-snap-type: x mandatory;
+    /*so cards can snap to start at beginning of next card during scroll*/
+    /*add scroll-snap-align to card for snapping*/
+    scroll-marker-group: after; /*Scroll markers for bottom dots for the carousel*/
 
+
+}
+
+/*Scroll markers for bottom dots for the carousel*/
+.carousel::scroll-marker-group {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+}
+
+/*Scroll markers for bottom dots for the carousel*/
+.card::scroll-marker {
+    content: '';
+    height: 1em;
+    width: 1em;
+    background-color: var(--clr-anchor);
+    border-radius: 50%
+}
+
+.card::scroll-marker:target-current {
+    background-color: var(--clr-accent);
+}
+
+.carousel::-webkit-scrollbar {
+    display: none;
+}
+
+/* This styles both buttons, in the way they look */
+.carousel::scroll-button(right), .carousel::scroll-button(left) {
+    content: '→';
+    border: none;
+    background-color: var(--clr-accent);
+    font-family: Consolas;
+    font-size: 3rem;
+    color: white;
+    height: 65px;
+    width: 65px;
+    border-radius: 50%;
+    padding-bottom: 0.1em;
+    cursor: pointer;
+    position: fixed;
+    position-anchor: --carousel; 
+    /*Position and position-anchor links this to .carousel or anchor-name delcaration*/
+    /*Look at position-area*/
+    translate: -50% /* moves arrows or content*/
+}
+
+/*  left scroll button*/
+.carousel::scroll-button(left) {
+    content: '←';
+    position-area: left center;
+    translate: 50%;
+}
+
+/*  right scroll button*/
+.carousel::scroll-button(right) {
+    position-area: right center;
+    translate: -50%;
+}
+/* If you don't style the disabled, it will disable itself with defaults */
+.carousel::scroll-button(right):disabled, .carousel::scroll-button(left):disabled {
+    opacity: 0.5;
+    cursor: auto;
 }
 
 .card {    
@@ -141,7 +211,8 @@ a {
     display: flex;
     flex-direction: column;
     gap: .5rem;
-    flex: 0 0 clamp(320px, 22vw, 360px)
+    flex: 0 0 clamp(320px, 22vw, 360px);
+    scroll-snap-align: start;
 }
 
 .card img {
@@ -150,6 +221,8 @@ a {
     aspect-ratio: 1 / 1;
     object-fit: cover;
     display: block;
+    padding: .75rem;
+    border-radius: 1em;
 }
 
 .card ul { 

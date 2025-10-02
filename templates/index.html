@@ -23,16 +23,22 @@
     <div class="carousel">
     {% for track in tracks %}    
         <div class="card">            
+            <div>
             <ul>
                 {% for album in track.albums.all %}
-                    <img src="{{album.cover.url}}" alt="{{ album.name }} cover">
-                    {% comment %} <li> {{ album.name }} </li> {% endcomment %}
-                    <audio controls>
-                        <source src={{track.audio.url}} type="audio/mpeg" >
-                        Your browser does not support the audio element
-                    </audio>
+                    <div class="card-image">
+                        <img src="{{album.cover.url}}" alt="{{ album.name }} cover">
+                    </div>                   
+                    <div class="card-audio">
+                        <audio controls>
+                            <source src={{track.audio.url}} type="audio/mpeg" >
+                            Your browser does not support the audio element
+                        </audio>
+                    </div>    
                 {% endfor %}
-            </ul> 
+            </ul>
+            </div> 
+<div>
             <h3> {{ track.title }} </h3>
 
             <ul>
@@ -41,6 +47,7 @@
 
                 {% endfor %}
             </ul>
+            </div>            
         </div>
     {% endfor %} 
     </div>
