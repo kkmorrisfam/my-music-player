@@ -35,6 +35,8 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "music.kerrmorr.com"
+    "www.music.kerrmorr.com",
+    "kerrmorr.com",
 ]
 
 
@@ -179,7 +181,8 @@ STORAGES = {
 }
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://music.kerrmorr.com"
+    "https://music.kerrmorr.com",
+    "https://www.music.kerrmorr.com",
 ]
 
 
