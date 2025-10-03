@@ -23,12 +23,19 @@ load_dotenv(BASE_DIR / ".env")
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-t+3)hr)cp48-d=@d4a(zuyyvndx2-wlacn6gz1#_!#e)ux7_tv'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
+# Toggle with env vars so dev/prod can differ cleanly
+DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "music.kerrmorr.com"
+]
 
 
 # Application definition
@@ -46,6 +53,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -55,6 +63,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
 ]
+
+if DEBUG: 
+    MIDDLEWARE.insert(4, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    INTERNAL_IPS = ["127.0.0.1"]
 
 ROOT_URLCONF = 'MusicPlayer.urls'
 
@@ -78,17 +90,26 @@ WSGI_APPLICATION = 'MusicPlayer.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('PGNAME'),
-        'USER': os.getenv('PGUSER'),
-        'PASSWORD': os.getenv('PGPASSWORD'),
-        'HOST': os.getenv('PGHOST', '127.0.0.1'),
-        'PORT': os.getenv('PGPORT', '5432'),        
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+############ remove after cloud db is setup################
+# If all Postgres vars are present (local dev), use Postgres
+if all(os.getenv(k) for k in ["PGNAME", "PGUSER", "PGPASSWORD", "PGHOST", "PGPORT"]):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('PGNAME'),
+            'USER': os.getenv('PGUSER'),
+            'PASSWORD': os.getenv('PGPASSWORD'),
+            'HOST': os.getenv('PGHOST', '127.0.0.1'),
+            'PORT': os.getenv('PGPORT', '5432'),        
+        }
+    }
 
 
 # Password validation
@@ -125,12 +146,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # add for static global files directory because there is more than one app
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+# need for whitenoise and collectstatic for production
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # add the root media folder with glbal directory
 MEDIA_URL = '/media/'
@@ -146,3 +170,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INTERNAL_IPS = [    
     "127.0.0.1",    
 ]
+
+# enable compression/manifest for better caching (optional)
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    }
+}
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://music.kerrmorr.com"
+]
+
+
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
