@@ -32,11 +32,12 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
 DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "music.kerrmorr.com"
-    "www.music.kerrmorr.com",
-    "kerrmorr.com",
+    #"localhost",
+    #"127.0.0.1",
+    #"music.kerrmorr.com"
+    #"www.music.kerrmorr.com",
+    #"kerrmorr.com",
+    '*',
 ]
 
 
