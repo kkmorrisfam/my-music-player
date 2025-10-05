@@ -33,7 +33,10 @@ DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
     "localhost",
-    "127.0.0.1",    
+    "127.0.0.1",
+    # "music.kerrmorr.com"
+    # "www.music.kerrmorr.com",
+    ".kerrmorr.com",
     # '*',
 ]
 
@@ -173,9 +176,6 @@ INTERNAL_IPS = [
 
 # enable compression/manifest for better caching (optional)
 STORAGES = {
-    "default": {  # media/uploads
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
     }

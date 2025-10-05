@@ -1,13 +1,74 @@
 {% extends 'layout.html' %}
 
-{% load static %}
-
 {% block title %}
-    Test Page
+    Music Library
 {% endblock %}
 
 {% block content %}
 
-    <h1>Hello World!</h1>      
+    <h1>Music Library</h1>
+    <p>Check out my <a href="/playlist">playlists</a></p>
+    
+    {% comment %} Every album instance gets a reverse manager named tracks {% endcomment %}
+    {% comment %} {% for album in albums %}
+        <p> {{ album.name }} </p>
+        <ul>
+            {% for track in album.tracks.all %}
+                <li> {{ track.title }} </li>
+
+        </ul>
+    {% endfor %}}  {% endcomment %}
+
+    {% comment %} this prints each track, with album name underneath {% endcomment %}
+    <div class="carousel">
+    {% for track in tracks %}    
+        <div class="card">            
+            <div>
+            <ul>
+                {% for album in track.albums.all %}
+                    <div class="card-image">
+                        <img src="{{album.cover.url}}" alt="{{ album.name }} cover">
+                    </div>                   
+                    <div class="card-audio">
+                        <audio controls>
+                            <source src={{track.audio.url}} type="audio/mpeg" >
+                            Your browser does not support the audio element
+                        </audio>
+                    </div>    
+                {% endfor %}
+            </ul>
+            </div> 
+<div>
+            <h3> {{ track.title }} </h3>
+
+            <ul>
+                {% for artist in track.artists.all %}
+                    <li> {{ artist.name}} </li>
+
+                {% endfor %}
+            </ul>
+            </div>            
+        </div>
+    {% endfor %} 
+    </div>
+    
+    
+
+
+
+{% comment %} <h2>{{ album.name }}</h2>
+<img src="{{ album.cover.url }}" alt="{{ album.name }}">
+
+<ol>
+  {% for track in album.tracks.all %}
+    <li>
+      {{ track.title }}
+      — {% for ar in track.artists.all %}{{ ar.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+      <audio controls src="{{ track.audio.url }}"></audio>
+    </li>
+  {% empty %}
+    <li>No tracks yet.</li>
+  {% endfor %}
+</ol> {% endcomment %}
 
 {% endblock content %}

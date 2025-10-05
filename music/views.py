@@ -39,7 +39,7 @@ def playlist(request):
     return render(request, 'playlist.html', {"playlists": playlists})
 
 #This view checks if a user is logged in, takes the primary key from the url passed in and returns
-# an playlsit object with all of it's tracks, the album covers and the artists associated with those tracks
+# a playlist object with all of it's tracks, the album covers and the artists associated with those tracks
 def playlist_view(request, pk):
     prefetch = Prefetch(
                         'playlisttrack_set', 
