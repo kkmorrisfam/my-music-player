@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),    
     path('', include("music.urls")),
     path("__debug__", include("debug_toolbar.urls")),  # added to see query information
+    path('users/', include('users.urls')),
 ]
 
 # move to debug for development only
