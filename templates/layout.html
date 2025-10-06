@@ -38,9 +38,10 @@
                 <li><a href="/users/register/" class="nav-links {% if request.path == '/users/register/' %}active{% endif %}">
                     <span aria-label="User Registration">Register</span>
                 </a></li>
-                {% comment %} <a href="/auth" class="nav-links">
-                    <span aria-label="Login">Login</span>
-                </a> {% endcomment %}
+                <li><a href="/users/login/" class="nav-links {% if request.path == '/users/login/' %}active{% endif %}">
+                    <span aria-label="User Login">Login</span>
+                </a></li>
+                
             <ul>
         </nav>
     </header>
