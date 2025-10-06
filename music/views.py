@@ -69,6 +69,14 @@ def about(request):
     # 'DIRS': [BASE_DIR / 'templates'],
 
 
+# Create new playlist
+def playlist_new(request):
+    return render(request, 'music/playlist_new.html')
+
+
+
+
+
 """  
     Explanation of query in query for all playlists
 

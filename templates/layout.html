@@ -39,8 +39,12 @@
                     <span aria-label="User Registration">Register</span>
                 </a></li>
                 <li><a href="/users/login/" class="nav-links {% if request.path == '/users/login/' %}active{% endif %}">
-                    <span aria-label="User Login">Login</span>
+                    <span aria-label="User Login">Log In</span>
                 </a></li>
+                <form class="logout" action={% url 'users:logout' %} method="post">
+                    {% csrf_token %}
+                    <button class="logout-button" aria-label="User Logout">Log Out</button>
+                </form>
                 
             <ul>
         </nav>
