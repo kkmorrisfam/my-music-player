@@ -1,8 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Album, Track, Artist, Playlist, PlaylistTrack
 from django.db.models.functions import Random
 from django.db.models import Prefetch
 from django.contrib.auth.decorators import login_required
+from .forms import AddPlaylistForm
+from django.db import IntegrityError
+
 
 # this is referred to in urls.py
 # path('', views.homepage),
@@ -39,7 +42,7 @@ def playlist(request):
     if request.user.is_authenticated:
         playlists = Playlist.objects.filter(owner=request.user).prefetch_related(prefetch) 
     
-    return render(request, 'playlist.html', {"playlists": playlists})
+    return render(request, 'music/playlist.html', {"playlists": playlists})
 
 #This view checks if a user is logged in, takes the primary key from the url passed in and returns
 # a playlist object with all of it's tracks, the album covers and the artists associated with those tracks
@@ -62,7 +65,7 @@ def playlist_view(request, pk):
                         owner=request.user
                     )
     
-    return render(request, 'playlist_view.html', {"playlist": playlist})
+    return render(request, 'music/playlist_view.html', {"playlist": playlist})
 
 
 # Returns a static page with no queries
@@ -76,7 +79,33 @@ def about(request):
 # if not logged in, redirects to login page
 @login_required(login_url="/users/login/")
 def playlist_new(request):
-    return render(request, 'music/playlist_new.html')
+    if request.method == "POST":
+        # create a form instance and add data from request
+        form = AddPlaylistForm(request.POST)
+        # see if it's valid
+        if form.is_valid():
+            # process the data
+            # create instance of model before saving it
+            new = form.save(commit=False)
+            # get user, add to instance
+            new.owner = request.user           
+            #after getting user, try to save with user and name
+            try: 
+                # save instance
+                new.save()
+            except IntegrityError:
+                form.add_error('name', 'You already have a playlist with this name.')
+                #return bound form so user can see errors
+                return render(request, 'music/playlist_new', {'form': form})
+            # redirect after posting
+            return redirect('music:playlist_view', pk=new.pk)
+    else:
+        # create new blank instance for user to fill out
+        form = AddPlaylistForm()
+    #re render page with form instance        
+    return render(request, 'music/playlist_new.html', {'form': form})
+
+
 
 
 

@@ -104,6 +104,7 @@ class PlayHistory(models.Model):
 class Playlist(models.Model):
     owner = models.ForeignKey(User, related_name="playlists", on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
+    # the auto_now_add=True adds current date and time automatically on save
     created_at = models.DateTimeField(auto_now_add=True)
     tracks = models.ManyToManyField(Track, through="PlaylistTrack", related_name="in_playlists")
 
