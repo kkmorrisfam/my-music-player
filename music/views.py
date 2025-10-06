@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Album, Track, Artist, Playlist, PlaylistTrack
 from django.db.models.functions import Random
 from django.db.models import Prefetch
+from django.contrib.auth.decorators import login_required
 
 # this is referred to in urls.py
 # path('', views.homepage),
@@ -20,7 +21,9 @@ def homepage(request):
     data = {'tracks': tracks}
     return render(request, 'index.html', data)
 
-#explanation for this query - below code block
+# explanation for this query - below code block
+# if not logged in - go to login page
+@login_required(login_url="/users/login/")
 def playlist(request):
     prefetch = Prefetch("playlisttrack_set", queryset=(
                         PlaylistTrack.objects
@@ -70,6 +73,8 @@ def about(request):
 
 
 # Create new playlist
+# if not logged in, redirects to login page
+@login_required(login_url="/users/login/")
 def playlist_new(request):
     return render(request, 'music/playlist_new.html')
 

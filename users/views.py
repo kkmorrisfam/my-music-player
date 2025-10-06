@@ -27,7 +27,12 @@ def login_view(request):
         if form.is_valid():
             # now you can login with form user
             login(request, form.get_user())
-            return redirect("music:home")
+            # if hidden field named "next", sent in POST object has value
+            # then redirect user to value in "next" field
+            if "next" in request.POST:                
+                return redirect(request.POST.get('next'))
+            else: 
+                return redirect("music:home")
     else: 
         # create empty form
         form = AuthenticationForm()

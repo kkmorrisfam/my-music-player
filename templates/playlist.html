@@ -8,7 +8,9 @@
 
     <h1>My Playlists</h1>    
     <p>Check out my <a href="/">Music Library</a> page</p>
-
+    <a href="{% url 'music:new-playlist' %}">
+       ➕ Create Playlist
+    </a>
     <div class="carousel">
         {% for playlist in playlists %}    
             <div class="card">   

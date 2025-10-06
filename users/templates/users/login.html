@@ -12,6 +12,11 @@
     <form class="form-with-validation" action="/users/login/" method="post">
         {% csrf_token %}
         {{ form }}
+        {% comment %} add hidden input to collect next page value in request/url, if it exists
+        this forwards user to intented page, when sent to login first {% endcomment %}
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next}}" />
+        {% endif %}
         <button class="form-submit">Login</button>
     </form>
 
