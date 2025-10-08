@@ -34,7 +34,8 @@ DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",    
-    # '*',
+    
+    '*',
 ]
 
 
@@ -188,6 +189,7 @@ STORAGES = {
 CSRF_TRUSTED_ORIGINS = [
     "https://music.kerrmorr.com",
     "https://www.music.kerrmorr.com",
+    "https://*.vercel.app"
 ]
 
 
