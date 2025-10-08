@@ -64,6 +64,7 @@ Packages installed are found in the requirements.txt project file and include:
 * [django documentation](https://www.djangoproject.com/)
 * [Real Python](https://realpython.com/python-virtual-environments-a-primer/)
 * [Python.org Documentation](https://docs.python.org/3/library/venv.html#creating-virtual-environments)
+* [HTMX Documentation](https://htmx.org/docs/)
 
 ## Future Work
 

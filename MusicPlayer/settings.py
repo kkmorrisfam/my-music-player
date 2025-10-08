@@ -112,6 +112,9 @@ if all(os.getenv(k) for k in ["PGNAME", "PGUSER", "PGPASSWORD", "PGHOST", "PGPOR
         }
     }
 
+# Setup custom user model, find it in the users app
+#AUTH_USER_MODEL = "users.User"
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
