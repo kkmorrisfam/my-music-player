@@ -27,15 +27,15 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
+DEBUG = False
 # Toggle with env vars so dev/prod can differ cleanly
-DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
+# DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",    
-    
-    '*',
+    ".kmorrislaw.net",
+    "*",
 ]
 
 
@@ -177,6 +177,7 @@ INTERNAL_IPS = [
 ]
 
 # enable compression/manifest for better caching (optional)
+'''
 STORAGES = {
     "default": {  # media/uploads
         "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -185,11 +186,20 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
     }
 }
+'''
+STORAGES = {
+  "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+  "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
+}
+
 
 CSRF_TRUSTED_ORIGINS = [
     "https://music.kerrmorr.com",
     "https://www.music.kerrmorr.com",
-    "https://*.vercel.app"
+    "https://*.vercel.app",
+    "https://www.music.kmorrislaw.net",
+    "https://music.kmorrislaw.net",
+    "https://*.kmorrislaw.net"
 ]
 
 
