@@ -2,6 +2,10 @@ from django.db import models
 
 # Create your models here.
 """ 
+# I needed to do this when I first created the database. I was going to add this 
+# when creating the db in the cloud, but I didn't have access to the cloud db on my
+# local computer due to limited access.
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 

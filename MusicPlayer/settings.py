@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,6 +24,8 @@ load_dotenv(BASE_DIR / ".env")
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# cryptographic signing to protect user sessions, password reset tokens, and other security-related data
+# needs to be set in production as env variable along with DJANGO_DEBUG 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
 
 
@@ -92,16 +95,17 @@ WSGI_APPLICATION = 'MusicPlayer.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
 
-############ remove after cloud db is setup################
+if os.getenv("DATABASE_URL"):
+    DATABASES = {
+        "default": dj_database_url.config(
+            env="DATABASE_URL",           # reads Cloud/CPanel env var
+            conn_max_age=600,             # optional: persistent connections
+        )
+    }
+
 # If all Postgres vars are present (local dev), use Postgres
-if all(os.getenv(k) for k in ["PGNAME", "PGUSER", "PGPASSWORD", "PGHOST", "PGPORT"]):
+elif all(os.getenv(k) for k in ["PGNAME", "PGUSER", "PGPASSWORD", "PGHOST", "PGPORT"]):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -112,7 +116,8 @@ if all(os.getenv(k) for k in ["PGNAME", "PGUSER", "PGPASSWORD", "PGHOST", "PGPOR
             'PORT': os.getenv('PGPORT', '5432'),        
         }
     }
-
+else:
+    raise RuntimeError("No DB config found. Set DATABASE_URL.")
 # Setup custom user model, find it in the users app
 #AUTH_USER_MODEL = "users.User"
 
