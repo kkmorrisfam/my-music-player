@@ -183,7 +183,7 @@ INTERNAL_IPS = [
 ]
 
 # enable compression/manifest for better caching (optional)
-
+'''
 STORAGES = {
     "default": {  # media/uploads
         "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -198,7 +198,7 @@ STORAGES = {
   "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
   "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
 }
-'''
+
 
 CSRF_TRUSTED_ORIGINS = [
     "https://music.kerrmorr.com",
