@@ -1,6 +1,5 @@
 .venv/
 logs/
-media/tracks
+media/tracks/test
 
 __pycache__/
-
