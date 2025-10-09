@@ -167,6 +167,7 @@ STATICFILES_DIRS = [
 # need for whitenoise and collectstatic for production
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+WHITENOISE_USE_FINDERS = True
 # add the root media folder with glbal directory
 MEDIA_URL = '/media/'
 
