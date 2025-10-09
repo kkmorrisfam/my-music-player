@@ -212,7 +212,7 @@ CSRF_TRUSTED_ORIGINS = [
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 
-
+'''
 LOG_DIR = BASE_DIR / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 
@@ -235,3 +235,4 @@ LOGGING = {
         "level": "INFO",
     },
 }
+'''
