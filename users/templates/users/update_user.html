@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block title %}
+    Update User Profile
+{% endblock %}
+
+{% block content %}
+
+    <h1>Update Profile</h1>      
+    <form class="form-with-validation" action="{% url 'users:update_user' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button class="form-submit">Update Profile</button>
+    </form>
+
+{% endblock content %}

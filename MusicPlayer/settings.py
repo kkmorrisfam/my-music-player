@@ -105,7 +105,8 @@ if os.getenv("DATABASE_URL"):
         )
     }
 
-# If all Postgres vars are present (local dev), use Postgres
+# If all Postgres vars are present (local dev), use Postgres, 
+# Fallback: These were used with the local database. It currently uses the neon database
 elif all(os.getenv(k) for k in ["PGNAME", "PGUSER", "PGPASSWORD", "PGHOST", "PGPORT"]):
     DATABASES = {
         'default': {
@@ -119,12 +120,6 @@ elif all(os.getenv(k) for k in ["PGNAME", "PGUSER", "PGPASSWORD", "PGHOST", "PGP
     }
 else:
     raise RuntimeError("No DB config found. Set DATABASE_URL.")
-# Setup custom user model, find it in the users app
-#AUTH_USER_MODEL = "users.User"
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -169,10 +164,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 WHITENOISE_USE_FINDERS = True
 
-# add the root media folder with glbal directory
-# MEDIA_URL = '/media/'
-
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Access media on cloudflare
 USE_S3_MEDIA = os.getenv("USE_S3_MEDIA", "0") == "1"
 
@@ -217,6 +208,7 @@ INTERNAL_IPS = [
 ]
 
 # enable compression/manifest for better caching (optional)
+# whitenoise compressedmanifestedstatic... was used with Mochahost
 '''
 STORAGES = {
     "default": {  # media/uploads
@@ -227,7 +219,7 @@ STORAGES = {
     }
 }
 '''
-
+# whitenoise compressedstatic.... is used by Vercel to serve static files
 STORAGES = {
   "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
   "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
@@ -251,7 +243,7 @@ CSRF_COOKIE_SECURE = not DEBUG
 
 
 '''
-#used this when deployed on Mochahost via CPanel. Doesn't work with Vercel
+#used this when deployed on Mochahost via CPanel. Doesn't work with Vercel because I can't write to anything on Vercel
 LOG_DIR = BASE_DIR / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 

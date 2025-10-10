@@ -1,13 +1,42 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
+from .forms import RegisterUserForm, UpdateUserForm
+from django.contrib.auth.models import User
+from django.contrib import messages
 
-# Create your views here.
+
+
+
+def update_user(request):
+    if request.user.is_authenticated:
+        current_user = User.objects.get(id=request.user.id) # gets current logged in user
+        #create instance to prepopulate form on initial load
+        form =UpdateUserForm(request.POST or None, instance=current_user)
+        
+        if form.is_valid():
+            form.save()
+
+            # login user again with new information
+            login(request, current_user)
+            messages.success(request, "User Has Been Updated!")
+            return redirect('music:home')
+        # if form not valid, rerender current page
+        return render(request, "users/update_user.html", {"form": form})
+    # if user not logged in
+    else:
+        messages.warning(request, "Please log in")
+        return redirect('music:home')
+    
+    #return render(request, "users/register.html", {"form": form })
+
+
+
 def register_view(request):
     # what to do when posted
     if request.method == "POST":
         #creates dict object instance of the form and adds data submitted through http POST request
-        form = UserCreationForm(request.POST)
+        form = RegisterUserForm(request.POST)
         if form.is_valid():
             # form.save()
             # login user and save user after valid
@@ -15,7 +44,8 @@ def register_view(request):
             return redirect("music:home") #when form is submitted and valid
     else:
         #just create empty form
-        form = UserCreationForm()
+        form = RegisterUserForm()
+
     return render(request, "users/register.html", { "form": form})
 
 
@@ -43,3 +73,5 @@ def logout_view(request):
     if request.method == "POST":
         logout(request)
         return redirect("music:home")
+    
+
