@@ -11,6 +11,7 @@
     --clr-primary: #03256C;
     --clr-paragraph: #edeaf7;/*#434345;*/
     --clr-accent: #cb793a; /* #8c86aa; */    
+    --clr-button:#ff6767;
     /*--clr-banner: #a7b4a1;*/
     
     --clr-header: #adb9a7; /*#34542b;*/
@@ -356,9 +357,9 @@ a {
 }
 
 .form-submit {
-    padding: 0.5rem;
+    padding: 0.6rem 1rem;
     border-radius: 10px;
-    width: 125px;
+    width: auto;
 }
 
 /* helptext and errorlist classes are default for forms, 
@@ -379,6 +380,43 @@ provided by Django built in form rendering*/
 
 .errorlist li::marker {
     content: '🚨 ';
+}
+
+/* --------------Base button --------------------------- */
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid transparent;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  transition: transform .06s ease, box-shadow .15s ease, filter .15s ease;
+  cursor: pointer;
+  max-width: 200px;
+}
+
+/* Primary (submit) — make it pop against the dark background */
+.btn-primary, .form-submit {
+  background: var(--clr-button);          /* pick any accent */
+  color: #0f172a;                /* near-black text */
+  border-color: #e5f6e9;
+}
+.btn-primary:hover, .form-submit:hover {
+  filter: brightness(0.97);
+  box-shadow: 0 6px 16px rgba(252, 246, 246, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Secondary “link-like” button for Update Password */
+.btn-ghost {
+  background: var(--clr-header);
+  color: var(--clr-primary);                /* muted light gray */
+  border-color: #475569;         /* subtle outline */
+}
+.btn-ghost:hover {
+  background: rgba(148,163,184,.15);
+  color: #e2e8f0;
 }
 
 

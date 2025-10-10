@@ -12,7 +12,9 @@
     <form class="form-with-validation" action="{% url 'users:update_user' %}" method="post">
         {% csrf_token %}
         {{ form }}
-        <button class="form-submit">Update Profile</button>
+        <button class="btn btn-primary">Update Profile</button>
     </form>
-
+    <br/><br/>
+    <a href="/users/update_password/" class="btn btn-ghost">Update Password</a>
+    
 {% endblock content %}

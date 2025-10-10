@@ -1,11 +1,14 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django import forms
 
+class ChangePasswordForm(SetPasswordForm):
+    class Meta:
+        model = User
+        fields = ['new_password1', 'new_password2']
 
 class RegisterUserForm(UserCreationForm):
-    # Hide password messages
-    password = None
+   
     email = forms.EmailField()
     first_name = forms.CharField(max_length=50)
     last_name = forms.CharField(max_length=70)
@@ -16,7 +19,8 @@ class RegisterUserForm(UserCreationForm):
 
 
 class UpdateUserForm(UserChangeForm):
-    
+     # Hide password messages
+    password = None
     email = forms.EmailField()
     first_name = forms.CharField(max_length=50)
     last_name = forms.CharField(max_length=70)

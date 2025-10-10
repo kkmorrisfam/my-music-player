@@ -1,12 +1,37 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
-from .forms import RegisterUserForm, UpdateUserForm
+from .forms import RegisterUserForm, UpdateUserForm, ChangePasswordForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 
 
+def update_password(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+        # Did they fill out the form
+        if request.method == "POST":
+            form = ChangePasswordForm(current_user, request.POST)
+            if form.is_valid():
+                form.save()
+                 # login user again with new information
+                
+                messages.success(request, "Password updated successfully!")
+                #login(request, current_user)
+                return redirect("users:login")
+            else: 
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
+                    return redirect("users:update_password")
+        else:
+            form = ChangePasswordForm(current_user)
+            # return redirect("music:home")
+            return render(request, "users/update_password.html", {"form": form})
+    else:
+        messages.warning(request, "Please log in first.")
+        return redirect('music:home')
 
+    # return render(request, "users/update_password.html", {"form": form})
 
 def update_user(request):
     if request.user.is_authenticated:
