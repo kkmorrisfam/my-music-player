@@ -168,10 +168,43 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 WHITENOISE_USE_FINDERS = True
-# add the root media folder with glbal directory
-MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# add the root media folder with glbal directory
+# MEDIA_URL = '/media/'
+
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# Access media on cloudflare
+USE_S3_MEDIA = os.getenv("USE_S3_MEDIA", "0") == "1"
+
+if USE_S3_MEDIA:
+    INSTALLED_APPS += ["storages"]
+
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+    AWS_ACCESS_KEY_ID = os.getenv("R2_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.getenv("R2_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.getenv("R2_BUCKET")
+    AWS_S3_REGION_NAME = "auto"
+    AWS_S3_ENDPOINT_URL = os.getenv("R2_ENDPOINT_URL")
+  
+    AWS_S3_ADDRESSING_STYLE = "path"
+
+    AWS_DEFAULT_ACL = None
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "public, max-age=31536000"}
+
+    # If a public host is set (r2.dev or custom domain), use it for media URLs
+    public_host = os.getenv("R2_PUBLIC_HOST")  # e.g. "xyz123.r2.dev" or "media.example.com"
+    if public_host:
+        AWS_S3_CUSTOM_DOMAIN = public_host
+        MEDIA_URL = f"https://{public_host}/"
+    else:
+        MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/"
+else:
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -214,7 +247,11 @@ CSRF_TRUSTED_ORIGINS = [
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 
+
+
+
 '''
+#used this when deployed on Mochahost via CPanel. Doesn't work with Vercel
 LOG_DIR = BASE_DIR / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 
