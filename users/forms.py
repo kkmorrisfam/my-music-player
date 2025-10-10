@@ -4,6 +4,8 @@ from django import forms
 
 
 class RegisterUserForm(UserCreationForm):
+    # Hide password messages
+    password = None
     email = forms.EmailField()
     first_name = forms.CharField(max_length=50)
     last_name = forms.CharField(max_length=70)
