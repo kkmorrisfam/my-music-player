@@ -6,18 +6,7 @@
 
 {% block content %}
 
-    <h1>Music Library</h1>
-    {% comment %} <p>Check out my <a href="/playlist">playlists</a></p> {% endcomment %}
-    
-    {% comment %} Every album instance gets a reverse manager named tracks {% endcomment %}
-    {% comment %} {% for album in albums %}
-        <p> {{ album.name }} </p>
-        <ul>
-            {% for track in album.tracks.all %}
-                <li> {{ track.title }} </li>
-
-        </ul>
-    {% endfor %}}  {% endcomment %}
+    <h1>Music Library</h1>   
 
     {% comment %} this prints each track, with album name underneath {% endcomment %}
     <div class="carousel">

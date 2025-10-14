@@ -1,49 +1,144 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Album, Track, Artist, Playlist, PlaylistTrack
 from django.db.models.functions import Random
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q, Max
 from django.contrib.auth.decorators import login_required
 from .forms import AddPlaylistForm
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
+from django.views.decorators.http import require_http_methods
+from django.http import HttpResponseBadRequest
 
 
-# this is referred to in urls.py
-# path('', views.homepage),
-def homepage(request):
-    # albums = Album.objects.all()    
-    # data = {'albums': albums}
-    # using prefetch_related instead of all, takes it down from 47 queries to just 2 with only "albums", adds one for each table fetching from
-    # tracks = Track.objects.filter(title__istartswith="t").prefetch_related('albums', 'artists')
-    
-    tracks = (
-        Track.objects 
-        .order_by(Random())   
-        .prefetch_related('albums', 'artists')
+# function to query database for Playlist data
+def get_playlist_for_display(user, pk: int) -> Playlist:
+    prefetch = Prefetch(
+                        'playlisttrack_set', 
+                        queryset=(
+                            PlaylistTrack.objects
+                            .select_related('track')
+                            .prefetch_related('track__albums', 'track__artists')
+                            .order_by('position', 'id')                            
+                        ), to_attr='items'
     )
     
-    data = {'tracks': tracks}
-    return render(request, 'index.html', data)
-
-# explanation for this query - below code block
-# if not logged in - go to login page
-@login_required(login_url="/users/login/")
-def playlist(request):
-    prefetch = Prefetch("playlisttrack_set", queryset=(
-                        PlaylistTrack.objects
-                        .select_related('track')
-                        .prefetch_related('track__albums','track__artists')
-                        .order_by('position')
-                        ), to_attr='pt_items'
-               )
     
-    playlists = Playlist.objects.none() #if not logged in, stays as none
+    return get_object_or_404(
+                        Playlist.objects.
+                        select_related("owner")                     
+                        .prefetch_related(prefetch),
+                        pk=pk,
+                        owner=user
+                        )
 
+@login_required
+@require_http_methods(["POST"])
+@transaction.atomic
+def playlist_remove_track(request, pk):
+    playlist = get_object_or_404(Playlist, pk=pk, owner=request.user)
 
-    if request.user.is_authenticated:
-        playlists = Playlist.objects.filter(owner=request.user).prefetch_related(prefetch) 
+    track_id = request.POST.get("track_id")
+    if not track_id:
+        return HttpResponseBadRequest("Missing track_id")
     
-    return render(request, 'music/playlist.html', {"playlists": playlists})
+    track = get_object_or_404(Track, pk=track_id)
 
+    #Delete the one row/track
+    PlaylistTrack.objects.filter(playlist=playlist, track=track).delete()
+
+    #re number positions
+    items = (PlaylistTrack.objects
+             .filter(playlist=playlist)
+             .order_by("position", "id"))
+    for idx, pt in enumerate(items, start=1):
+        if pt.position != idx:
+            pt.position = idx
+            pt.save(update_fields=["position"])
+
+    #return updated list
+    playlist = get_playlist_for_display(request.user, pk)
+    return render(request, "music/partials/_playlist_items.html", {"playlist": playlist})
+
+
+@login_required
+@require_http_methods(["POST"])
+@transaction.atomic
+def playlist_add_track(request, pk):
+    # add track to the playlist, return updated list partial
+    #check ownership
+    playlist = get_object_or_404(Playlist, pk=pk, owner = request.user)
+
+    # validate
+    track_id = request.POST.get("track_id")
+    if not track_id:
+        return render(
+            request, 
+            "music/partials/_playlist_items.html",
+            {"playlist": get_playlist_for_display(request.user, pk)},
+            status=400,
+        )
+    
+    track = get_object_or_404(Track, pk=track_id)
+
+    # figure out next position
+    # last = PlaylistTrack.objects.filter(playlist=playlist).order_by("-position").first()
+    # next_pos = (last.position + 1) if last else 1
+    next_pos = (PlaylistTrack.objects.filter(playlist=playlist). aggregate(m=Max("position"))["m"] or 0) + 1
+
+    # insert into database
+    pt, created = PlaylistTrack.objects.get_or_create(
+        playlist=playlist, 
+        track=track,
+        defaults={"position": next_pos},
+    )
+    
+    if not created:
+        pt.position = next_pos
+        pt.save(update_fields=["position"])
+
+    #render updated list partial
+    playlist = get_playlist_for_display(request.user, pk)
+    return render(request, "music/partials/_playlist_items.html", {"playlist" : playlist})
+
+
+@login_required
+def track_search(request, pk):
+    # make sure playlist is owned by user
+    get_object_or_404(Playlist, pk=pk, owner=request.user)
+
+    # read query in request object url (?q=...)
+    q = (request.GET.get("q") or "").strip()
+
+    results = []
+    if q:
+        # if query, then build a case-insensitive filter
+        # match track title or any artist name
+        results = (
+            Track.objects
+            .filter(Q(title__icontains=q) | Q(artists__name__icontains=q))
+            .distinct()  # for M2M joins, collapse filter to unique tracks
+            .prefetch_related("artists")
+            .order_by("title")[:25]
+        )
+
+    # render the results in the partial
+    return render (request, "music/partials/_track_results.html", 
+                   {"playlist_id":pk, "results":results, "q": q})    
+
+
+@login_required
+def playlist_items(request, pk):
+    # HTMX partial that renders the album cover + tracks list
+    playlist = get_playlist_for_display(request.user, pk)
+    return render(request, "music/partials/_playlist_items.html", {"playlist": playlist})
+
+# returns the composer UI (searchbar + results + current items list)
+@login_required
+def playlist_composer(request, pk):
+    playlist = get_playlist_for_display(request.user, pk)
+    return render(request, "music/partials/_playlist_composer.html", {"playlist": playlist})
+
+
+# Get all Playlists for one user
 #This view checks if a user is logged in, takes the primary key from the url passed in and returns
 # a playlist object with all of it's tracks, the album covers and the artists associated with those tracks
 def playlist_view(request, pk):
@@ -68,7 +163,28 @@ def playlist_view(request, pk):
     return render(request, 'music/playlist_view.html', {"playlist": playlist})
 
 
-# Returns a static page with no queries
+# Get data object with all tracks, with album and artists 
+# this is referred to in urls.py
+# path('', views.homepage),
+def homepage(request):
+    # albums = Album.objects.all()    
+    # data = {'albums': albums}
+    # using prefetch_related instead of all, takes it down from 47 queries to just 2 with only "albums", adds one for each table fetching from
+    # tracks = Track.objects.filter(title__istartswith="t").prefetch_related('albums', 'artists')
+    
+    tracks = (
+        Track.objects 
+        .order_by(Random())   
+        .prefetch_related('albums', 'artists')
+    )
+    
+    data = {'tracks': tracks}
+    return render(request, 'index.html', data)
+
+
+
+
+# Returns a static page "about" with no queries
 def about(request):
     return render(request, 'about.html')
     # knows where it's found because of entry in the settings.py with 'DIRS'
@@ -96,9 +212,18 @@ def playlist_new(request):
             except IntegrityError:
                 form.add_error('name', 'You already have a playlist with this name.')
                 #return bound form so user can see errors
-                return render(request, 'music/playlist_new', {'form': form})
-            # redirect after posting
+                return render(request, 'music/playlist_new.html', {'form': form})
+               
+
+             # if HTMX request, return composer partial
+            if request.headers.get("HX-Request") == "true":
+                return playlist_composer(request, new.pk)            
+            # redirect - if not htmx
             return redirect('music:playlist_view', pk=new.pk)
+        
+        # invalid form, rerender with errors.  Because of partials, add this here, so whole page isn't rerendered into target
+        return render(request, "music/playlist_new.html", {"form": form})
+    
     else:
         # create new blank instance for user to fill out
         form = AddPlaylistForm()
@@ -107,12 +232,31 @@ def playlist_new(request):
 
 
 
+# Gel all playlists
+# explanation for this query - below code block
+# if not logged in - go to login page
+@login_required(login_url="/users/login/")
+def playlist(request):
+    prefetch = Prefetch("playlisttrack_set", queryset=(
+                        PlaylistTrack.objects
+                        .select_related('track')
+                        .prefetch_related('track__albums','track__artists')
+                        .order_by('position')
+                        ), to_attr='pt_items'
+               )
+    
+    playlists = Playlist.objects.none() #if not logged in, stays as none
 
+
+    if request.user.is_authenticated:
+        playlists = Playlist.objects.filter(owner=request.user).prefetch_related(prefetch) 
+    
+    return render(request, 'music/playlist.html', {"playlists": playlists})
 
 
 
 """  
-    Explanation of query in query for all playlists
+    Explanation of query in query for get all playlists
 
 Query 1: filter by owner
 

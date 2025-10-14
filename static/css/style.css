@@ -384,6 +384,11 @@ provided by Django built in form rendering*/
 }
 
 /* --------------Base button --------------------------- */
+.form-submit {
+  background: var(--clr-header);          
+  color: var(--clr-dark); 
+}
+
 .btn {
   display: inline-block;
   padding: 0.6rem 1rem;
@@ -398,9 +403,9 @@ provided by Django built in form rendering*/
 }
 
 /* Primary (submit) — make it pop against the dark background */
-.btn-primary, .form-submit {
-  background: var(--clr-button);          /* pick any accent */
-  color: #0f172a;                /* near-black text */
+.btn-primary {
+  background: var(--clr-button);          
+  color: #0f172a;                
   border-color: #e5f6e9;
 }
 .btn-primary:hover, .form-submit:hover {
@@ -420,7 +425,41 @@ provided by Django built in form rendering*/
   color: #e2e8f0;
 }
 
+.btn-sm {
+  padding: 0.35rem 0.6rem;  
+  font-size: 0.9rem;
+  border-radius: 8px;
+  appearance: none;
+  -webkit-appearance: none;
+  display:inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: none;
+  background: var(--clr-button);
+  color: var(--clr-dark); 
+  font: var(--heading-font);
+  font-size: .9rem;
+  line-height: 1.2;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  transition: background-color .15s ease, transform .05s ease, box-shadow .15s ease, opacity .15s ease;
+}
 
+
+/*------------------*/
+.partial-div {
+    margin-top: 1.5rem;
+}
+
+.partial-items {
+    margin-top: 3 rem;
+}
+
+/* .partial-composer {
+    
+} */
 
 /* ------------------footer---------------------- */
 

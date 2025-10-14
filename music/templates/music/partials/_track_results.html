@@ -1,0 +1,25 @@
+{% if q and results %}
+  <ul class="search-list">
+    {% for track in results %}
+      <li class="search-item">
+        <div>
+          <strong>{{ track.title }}</strong>
+          {% if track.artists.all %}
+            – {% for a in track.artists.all %}{{ a.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+          {% endif %}
+        </div>
+        <button
+          class="btn-sm"
+          hx-post="{% url 'music:playlist_add_track' playlist_id %}"
+          hx-vals='{"track_id": "{{ track.id }}"}'
+          hx-target="#playlist-items"
+          hx-swap="innerHTML"
+        >Add</button>
+      </li>
+    {% endfor %}
+  </ul>
+{% elif q %}
+  <p>No matches for “{{ q }}”.</p>
+{% else %}
+  <p>Start typing to search…</p>
+{% endif %}

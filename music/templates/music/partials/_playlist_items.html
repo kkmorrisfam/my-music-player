@@ -1,0 +1,55 @@
+<div class="playlist-container">
+    <div class="playlist-album">
+        <div class="playlist-album-frame">
+            {% with first=playlist.items.0 %}
+                {% if first %}
+                    {% with album=first.track.albums.all.0 %}
+                        {% if album %}
+                            <img src="{{ album.cover.url }}" alt="{{ album.name }} cover">
+                        {% endif %}   
+                    {% endwith %}
+                {% endif %}
+            {% endwith %}
+        </div>       
+    </div>
+
+    <div "track-card">
+        <ul>
+            {% for item in playlist.items %}
+                <li class="track-list">
+                    <div class="track-list-name">
+                        {{ item.position }}. {{ item.track.title }}
+                        - {% for a in item.track.artist.all %}
+                            {{ a.name }} 
+                            {% if not forloop.last  %},{% endif %}
+                        {% endfor %}
+                    </div>
+                 
+                    <div>
+                        <button
+                            class="btn-sm"
+                            hx-post="{% url 'music:playlist_remove_track' playlist.pk %}"
+                            hx-vals='{"track_id": "{{ item.track.id }}"}'
+                            hx-target="#playlist-items"
+                            hx-swap="innerHTML"
+                            hx-confirm="Remove this track from playlist?"
+                            area-label="Remove {{ item.track.title }}"
+                        >➖</button>
+                    </div>
+
+                    <div class="track-list-audio">
+                            <audio controls>
+                            <source src={{item.track.audio.url}} type="audio/mpeg" >
+                            Your browser does not support the audio element
+                            </audio>
+                    </div>
+                   
+                </li>
+                    
+            {% empty %}
+                <li>No tracks yet. Use the search above to add some!</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+</div>
