@@ -2,12 +2,6 @@
   <ul class="search-list">
     {% for track in results %}
       <li class="search-item">
-        <div>
-          <strong>{{ track.title }}</strong>
-          {% if track.artists.all %}
-            – {% for a in track.artists.all %}{{ a.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
-          {% endif %}
-        </div>
         <button
           class="btn-sm"
           hx-post="{% url 'music:playlist_add_track' playlist_id %}"
@@ -15,6 +9,14 @@
           hx-target="#playlist-items"
           hx-swap="innerHTML"
         >Add</button>
+
+        <div class="search-result-track">
+          <strong>{{ track.title }}</strong>
+          {% if track.artists.all %}
+            – {% for a in track.artists.all %}{{ a.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+          {% endif %}
+        </div>
+        
       </li>
     {% endfor %}
   </ul>

@@ -1,14 +1,15 @@
 <div class="playlist-composer">
     <form
-    class="search-form"  
-    hx-get="{% url 'music:track_search' playlist.pk %}" 
-    hx-target="#search-results"
-    hx-trigger="keyup changed delay:300ms from:#track-search">
-    {% csrf_token %} <!--  global CSRF header duplicates -->
-    <input id="track-search" type="search" name="q" placeholder="Search tracks or artists..." autocomplete="off">
+        class="search-form"  
+        hx-get="{% url 'music:track_search' playlist.pk %}" 
+        hx-target="#search-results"
+        hx-trigger="keyup changed delay:300ms from:#track-search">
+        {% csrf_token %} <!--  global CSRF header duplicates -->
+        <h3>Add songs to your playlist.</h3>
+        <input id="track-search" type="search" name="q" placeholder="Search tracks or artists..." autocomplete="off">
     </form>
 
-    <div id="search-results" class="partial-div"></div>
+    <div id="search-results" class="search-result-container"></div>
 
     <div
         id="playlist-items"

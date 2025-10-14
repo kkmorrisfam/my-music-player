@@ -8,12 +8,12 @@
 
 {% block content %}
     <div>
-        <h1>{{ playlist.name }} </h1>
+        <h1 class="sticky">{{ playlist.name }} </h1>
         <p>View all <a href="/playlist">playlists</a></p>
     </div>
 
     <div id="composer" 
-        hx-get = "{% url 'music:track_search' playlist.pk %}"
+        hx-get = "{% url 'music:playlist_composer' playlist.pk %}"
         hx-trigger="load"
         hx-swap="innerHTML">
     </div>

@@ -11,7 +11,8 @@
     --clr-primary: #03256C;
     --clr-paragraph: #edeaf7;/*#434345;*/
     --clr-accent: #cb793a; /* #8c86aa; */    
-    --clr-button:#ff6767;
+    --clr-button:#fec8a6;
+
     /*--clr-banner: #a7b4a1;*/
     
     --clr-header: #adb9a7; /*#34542b;*/
@@ -66,7 +67,7 @@ h2 {
 }
 
 h3, h4, h5, h6 {
-    color:var(--clr-headings);
+    color:var(--clr-light);
     font-family: var(--heading-font);    
 }
 
@@ -272,7 +273,7 @@ a {
 }
 
 .playlist-album {
-    background-color: var(--clr-anchor);
+    /* background-color: var(--clr-anchor); */
     padding: 1em;
     border-radius: 0.6em;
     text-align: center;
@@ -383,6 +384,32 @@ provided by Django built in form rendering*/
     content: '🚨 ';
 }
 
+
+.search-form {
+    padding: 1rem;
+}
+
+.search-form input {
+    padding: .5rem;
+}
+
+.search-result-container {
+    color: var(--clr-paragraph);
+    
+}
+
+.search-list {
+    max-width: 95%;
+}
+
+.search-item {
+    display: flex;
+    padding: .5rem;
+}
+
+.search-result-track {
+    padding: .2rem .75rem;
+}
 /* --------------Base button --------------------------- */
 .form-submit {
   background: var(--clr-header);          
@@ -460,6 +487,10 @@ provided by Django built in form rendering*/
 /* .partial-composer {
     
 } */
+ /* .sticky {
+    position: sticky;
+    top: 50px;
+ } */
 
 /* ------------------footer---------------------- */
 
@@ -474,7 +505,7 @@ footer p {
 }
 
 
-/*________________Mobile view*/
+/*________________Mobile view*---------------------------------*/
 @media(max-width: 500px) {
     :root { --header-h: 6rem;}
 
@@ -647,6 +678,9 @@ footer p {
         gap: .5rem;
     }
 
+    .playlist-album {
+        display: none;
+    }
     
 
 }
