@@ -6,6 +6,11 @@ I've created a music app in Django and connected it to a PostgreSQL database.  T
 
 The models are set up so that an album can have multiple tracks, one artist or multiple artists.  However if you display an album with the artist and there are many artists, it will just display “various” for the artist field.  A track can be listed on multiple albums and an artist can be on both an album and a track.  A track can also have multiple artists. At this point I have not utilized everything I can with this design, but would like it to be flexible as I add to it in the future.
 
+The app is hosted on vercel at Vercel, with database hosting by neon, and asset hosting by Cloudflare
+[Vercel](https://my-music-player-red.vercel.app/)
+[Neon](https://neon.com/)
+[Cloudflare](https://www.cloudflare.com/)
+
 The purpose of this app was to become familiar with audio files and data retrieval so that I could work on creating a podcast app in the future.
 
 ## Web Pages
@@ -21,6 +26,10 @@ This page displays the details for the playlist chosen on the playlists page.  T
 
 About Page:
 This page displays details for images and audio copyright information for assets used in this project.
+
+## Cloud Database
+
+I use a PostgreSQL database hosted by Neon.com.
 
 ## Development Environment
 
@@ -57,7 +66,9 @@ Packages installed are found in the requirements.txt project file and include:
 * Pillow
 * Django debug toolbar
 * Django stubs
-* Psycopg2
+* Psycopg2-binary
+
+I used HTMX as a lightweight library to make UI interactive while rendering server-side.  HTMX allowed me to udpate data from the database and reload page fragments.  I used this to create and delete playlists as well as add and removing tracks from a playlist without an entire page reload.  I also set up javascript to handle setting the X-CSRFToken header globally so POST/PUT/DELETE would work securley.
 
 ## Useful Websites
 
@@ -68,7 +79,7 @@ Packages installed are found in the requirements.txt project file and include:
 
 ## Future Work
 
-* Add user registration and login functionality
-* If user is logged in, a user can add a track to their playlist
-* Setup app in the cloud for production, with a cloud database
 * Add form to upload user albums or songs
+* Add a play queue
+* Add favorites
+* Add other queues
