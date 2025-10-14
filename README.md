@@ -68,7 +68,7 @@ Packages installed are found in the requirements.txt project file and include:
 * Django stubs
 * Psycopg2-binary
 
-I used HTMX as a lightweight library to make UI interactive while rendering server-side.  HTMX allowed me to udpate data from the database and reload page fragments.  I used this to create and delete playlists as well as add and removing tracks from a playlist without an entire page reload.  I also set up javascript to handle setting the X-CSRFToken header globally so POST/PUT/DELETE would work securley.
+I used HTMX as a lightweight library to make UI interactive while rendering server-side.  HTMX allowed me to udpate data from the database and reload page fragments.  I used this to create and delete playlists as well as add, remove and search tracks without an entire page reload.  I also set up javascript to handle setting the X-CSRFToken header globally so POST/PUT/DELETE would work securley.
 
 ## Useful Websites
 

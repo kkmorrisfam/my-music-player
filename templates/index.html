@@ -40,24 +40,5 @@
         </div>
     {% endfor %} 
     </div>
-    
-    
-
-
-
-{% comment %} <h2>{{ album.name }}</h2>
-<img src="{{ album.cover.url }}" alt="{{ album.name }}">
-
-<ol>
-  {% for track in album.tracks.all %}
-    <li>
-      {{ track.title }}
-      — {% for ar in track.artists.all %}{{ ar.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
-      <audio controls src="{{ track.audio.url }}"></audio>
-    </li>
-  {% empty %}
-    <li>No tracks yet.</li>
-  {% endfor %}
-</ol> {% endcomment %}
 
 {% endblock content %}

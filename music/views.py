@@ -11,14 +11,7 @@ from django.contrib import messages
 
 # function to query database for user playlists
 def _user_playlists(user):
-    # pt_qs = (PlaylistTrack.objects
-    #          .select_related("track")
-    #          .prefetch_related("track__albums", "track__artists")
-    #          .order_by("position", "id"))
-    # return (Playlist.objects
-    #         .filter(owner=user)
-    #         .prefetch_related(Prefetch("playlisttrack_set", queryset=pt_qs, to_attr="pt_items")))
-
+   
     prefetch = Prefetch("playlisttrack_set", queryset=(
                         PlaylistTrack.objects
                         .select_related('track')
@@ -83,10 +76,7 @@ def remove_playlist(request, pk:int):
         # playlists = Playlist.objects.filter(owner=request.user).prefetch_related("tracks")
         playlists = _user_playlists(request.user)
         
-        # (Playlist.objects
-        #          .filter(owner=request.user)
-        #          .prefetch_related(Prefetch("pt_items", queryset=pt_qs)))
-
+   
         return render(request, "music/partials/_playlists.html", {"playlists": playlists})
 
     # messages.success(request, "Playlist deleted.")
@@ -301,7 +291,16 @@ def playlist_new(request):
 # if not logged in - go to login page
 @login_required(login_url="/users/login/")
 def playlist(request):
-    # prefetch = Prefetch("playlisttrack_set", queryset=(
+   
+    playlists = _user_playlists(request.user)   
+    return render(request, 'music/playlist.html', {"playlists": playlists})
+
+
+
+"""  
+    Explanation of query in query for get all playlists
+
+     # prefetch = Prefetch("playlisttrack_set", queryset=(
     #                     PlaylistTrack.objects
     #                     .select_related('track')
     #                     .prefetch_related('track__albums','track__artists')
@@ -315,13 +314,6 @@ def playlist(request):
     # if request.user.is_authenticated:
     #     playlists = Playlist.objects.filter(owner=request.user).prefetch_related(prefetch) 
 
-    playlists = _user_playlists(request.user)   
-    return render(request, 'music/playlist.html', {"playlists": playlists})
-
-
-
-"""  
-    Explanation of query in query for get all playlists
 
 Query 1: filter by owner
 

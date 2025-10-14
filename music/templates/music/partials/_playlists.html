@@ -29,19 +29,7 @@
                 aria-label="Remove {{ playlist.name }} playlist"                
               >➖</button>
             </div>
-
-            {# display album cover from first track in query #}
-            {% comment %} {% with first=playlist.pt_items.0 %}
-              {% if first %}
-                {% with album=first.track.albums.all.0 %}
-                  {% if album %}
-                    <img src="{{ album.cover.url }}" alt="{{ album.cover.name }}">
-                  {% endif %}
-                {% endwith %}
-              {% endif %}
-            {% endwith %} {% endcomment %}
-            {% comment %} Get first item, pt_items is a list of results {% endcomment %}
-
+            
             {% with item=playlist.pt_items|first %}
                 {% if item %}
                     {% with track=item.track %}
