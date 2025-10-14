@@ -4,10 +4,31 @@ from django.db.models.functions import Random
 from django.db.models import Prefetch, Q, Max
 from django.contrib.auth.decorators import login_required
 from .forms import AddPlaylistForm
-from django.db import IntegrityError, transaction
+from django.db import IntegrityError, transaction, DatabaseError
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponseBadRequest
+from django.contrib import messages
 
+# function to query database for user playlists
+def _user_playlists(user):
+    # pt_qs = (PlaylistTrack.objects
+    #          .select_related("track")
+    #          .prefetch_related("track__albums", "track__artists")
+    #          .order_by("position", "id"))
+    # return (Playlist.objects
+    #         .filter(owner=user)
+    #         .prefetch_related(Prefetch("playlisttrack_set", queryset=pt_qs, to_attr="pt_items")))
+
+    prefetch = Prefetch("playlisttrack_set", queryset=(
+                        PlaylistTrack.objects
+                        .select_related('track')
+                        .prefetch_related('track__albums','track__artists')
+                        .order_by('position')
+                        ), to_attr='pt_items'
+               )
+    return (Playlist.objects
+                            .filter(owner=user)
+                            .prefetch_related(prefetch))
 
 # function to query database for Playlist data
 def get_playlist_for_display(user, pk: int) -> Playlist:
@@ -29,6 +50,49 @@ def get_playlist_for_display(user, pk: int) -> Playlist:
                         pk=pk,
                         owner=user
                         )
+
+
+
+
+# remove a playlist - I will need to remove name and tracks associated with it
+@login_required
+def remove_playlist(request, pk:int):
+    # verify ownership and get playlist wanting to remove
+    playlist = get_object_or_404(Playlist, pk=pk, owner=request.user)
+         
+    
+    try:
+        with transaction.atomic():
+            name = playlist.name
+
+            #Delete the one playlist
+            playlist.delete()
+        messages.success(request, f"Deleted playlist “{name}”.")
+       
+    except DatabaseError:
+        messages.error(request, "Sorry—couldn’t delete that playlist. Please try again.")
+        if request.headers.get("HX-Request"):
+            # Re-render list even on error so the page stays consistent;            
+            playlists = Playlist.objects.filter(owner=request.user).prefetch_related("tracks")
+            return render(request, "music/partials/_playlists.html", {"playlists": playlists}, status=400)
+        
+        # If delete failed, fall back to 'next' if present, otherwise go back to the view page
+        return redirect(request.POST.get("next"))
+    
+    if request.headers.get("HX-Request"):
+        # playlists = Playlist.objects.filter(owner=request.user).prefetch_related("tracks")
+        playlists = _user_playlists(request.user)
+        
+        # (Playlist.objects
+        #          .filter(owner=request.user)
+        #          .prefetch_related(Prefetch("pt_items", queryset=pt_qs)))
+
+        return render(request, "music/partials/_playlists.html", {"playlists": playlists})
+
+    # messages.success(request, "Playlist deleted.")
+    return redirect(request.POST.get("next") or "music:playlist")
+
+
 
 @login_required
 @require_http_methods(["POST"])
@@ -237,20 +301,21 @@ def playlist_new(request):
 # if not logged in - go to login page
 @login_required(login_url="/users/login/")
 def playlist(request):
-    prefetch = Prefetch("playlisttrack_set", queryset=(
-                        PlaylistTrack.objects
-                        .select_related('track')
-                        .prefetch_related('track__albums','track__artists')
-                        .order_by('position')
-                        ), to_attr='pt_items'
-               )
+    # prefetch = Prefetch("playlisttrack_set", queryset=(
+    #                     PlaylistTrack.objects
+    #                     .select_related('track')
+    #                     .prefetch_related('track__albums','track__artists')
+    #                     .order_by('position')
+    #                     ), to_attr='pt_items'
+    #            )
     
-    playlists = Playlist.objects.none() #if not logged in, stays as none
+    # playlists = Playlist.objects.none() #if not logged in, stays as none
 
 
-    if request.user.is_authenticated:
-        playlists = Playlist.objects.filter(owner=request.user).prefetch_related(prefetch) 
-    
+    # if request.user.is_authenticated:
+    #     playlists = Playlist.objects.filter(owner=request.user).prefetch_related(prefetch) 
+
+    playlists = _user_playlists(request.user)   
     return render(request, 'music/playlist.html', {"playlists": playlists})
 
 

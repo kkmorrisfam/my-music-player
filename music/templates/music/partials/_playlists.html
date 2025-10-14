@@ -1,0 +1,87 @@
+<div id="all-playlists">
+{% comment %} <p style="opacity:.6">playlists length = {{ playlists|length }}</p>
+{% if playlists is None %}<p style="color:red">playlists is None</p>{% endif %} {% endcomment %}
+
+{% load static %}
+
+    <h1 class="sticky">My Playlists</h1>
+  <p>Check out my <a href="/">Music Library</a> page</p>
+
+  <a href="{% url 'music:new_playlist' %}">➕ Create Playlist</a>
+
+  <div class="carousel">
+    {% for playlist in playlists %}
+    
+      <div class="card">
+        <a href="{% url 'music:playlist_view' pk=playlist.pk %}">
+          <span aria-label="{{ playlist.name }}"></span>
+
+          <div>
+            {# delete button is NOT inside the anchor #}
+            <div>
+              <button
+                title="Delete playlist"
+                class="btn-sm"
+                hx-post="{% url 'music:remove_playlist' pk=playlist.pk %}"
+                hx-target="#all-playlists"
+                hx-swap="outerHTML"
+                hx-confirm="Delete this playlist?"
+                aria-label="Remove {{ playlist.name }} playlist"                
+              >➖</button>
+            </div>
+
+            {# display album cover from first track in query #}
+            {% comment %} {% with first=playlist.pt_items.0 %}
+              {% if first %}
+                {% with album=first.track.albums.all.0 %}
+                  {% if album %}
+                    <img src="{{ album.cover.url }}" alt="{{ album.cover.name }}">
+                  {% endif %}
+                {% endwith %}
+              {% endif %}
+            {% endwith %} {% endcomment %}
+            {% comment %} Get first item, pt_items is a list of results {% endcomment %}
+
+            {% with item=playlist.pt_items|first %}
+                {% if item %}
+                    {% with track=item.track %}
+                        {% with album=track.albums.all|first %}
+                            {% if album and album.cover %}
+                            <img src="{{ album.cover.url }}" alt="{{ album.cover.name }}" loading="lazy">
+                            {% else %}
+                            <img src="{% static 'img/fallback.webp' %}" alt="No album cover" loading="lazy">
+                            {% endif %}
+                        {% endwith %}
+                    {% endwith %}
+                {% else %}
+                    {# playlist has NO items at all #}
+                    <img src="{% static 'img/fallback.webp' %}" alt="No album cover" loading="lazy">
+                    <p class="artists">&nbsp;</p>
+                {% endif %}
+            {% endwith %}            
+          </div>
+          <div>
+            <h3>{{ playlist.name }}</h3>
+            <p class="artists">
+              {% with first=playlist.pt_items.0 %}
+                {% if first %}
+                  {% for artist in first.track.artists.all|slice:":2" %}
+                    {{ artist.name }}{% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
+            </p>
+          </div>
+        </a>
+      </div>
+
+    {% empty %}
+    <div class="empty-state">
+      <img src="{% static 'img/fallback.webp' %}" alt="No album cover" loading="lazy">
+      <p class="artists">&nbsp;</p>
+      <p>You don't have any playlists yet.</p>
+      
+    </div> 
+    {% endfor %}
+  </div>
+</div>
