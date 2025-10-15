@@ -7,9 +7,10 @@ I've created a music app in Django and connected it to a PostgreSQL database.  T
 The models are set up so that an album can have multiple tracks, one artist or multiple artists.  However if you display an album with the artist and there are many artists, it will just display “various” for the artist field.  A track can be listed on multiple albums and an artist can be on both an album and a track.  A track can also have multiple artists. At this point I have not utilized everything I can with this design, but would like it to be flexible as I add to it in the future.
 
 The app is hosted on vercel at Vercel, with database hosting by neon, and asset hosting by Cloudflare
-[Vercel](https://my-music-player-red.vercel.app/)
-[Neon](https://neon.com/)
-[Cloudflare](https://www.cloudflare.com/)
+
+* [Vercel](https://my-music-player-red.vercel.app/)
+* [Neon](https://neon.com/)
+* [Cloudflare](https://www.cloudflare.com/)
 
 The purpose of this app was to become familiar with audio files and data retrieval so that I could work on creating a podcast app in the future.
 
