@@ -280,7 +280,7 @@ a {
     align-content: center;    
     display: grid;
     place-items: center;
-    /* flex-direction: column; */
+ 
 }
 
 .playlist-album-frame {
@@ -294,8 +294,7 @@ a {
 }
 
 .track-card {
-    /* opacity: 0.5; */
-    /* background-color: var(--clr-light); */
+ 
     padding: 3rem;
        
 }
@@ -305,7 +304,7 @@ a {
 
 .track-card li {
     color: var(--clr-dark);
-    /* opacity: 0.75; */
+ 
     background-color: var(--clr-accent);
     padding: 3rem;
     font-size: large;
@@ -316,14 +315,8 @@ a {
     justify-content: space-between;
 }
 
-/* .track-list-audio {
-   
-} */
+
 /* ------------About Page----------------*/
-/* .attribute-container {
-    display: flex;
-    
-} */
 
 .attribute img {
     width: 15%;
